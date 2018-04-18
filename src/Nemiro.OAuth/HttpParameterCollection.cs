@@ -21,6 +21,7 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Net;
 using System.Threading;
+using Newtonsoft.Json;
 
 namespace Nemiro.OAuth
 {
@@ -167,9 +168,9 @@ namespace Nemiro.OAuth
       if (value != null)
       {
         var t = value.GetType();
-        if (t == typeof(System.Web.HttpPostedFile))
+        if (t == typeof(HttpPostedFile))
         {
-          this.Add(name, (System.Web.HttpPostedFile)value);
+          this.Add(name, (HttpPostedFile)value);
         }
         else if (t == typeof(Stream) || (t.BaseType != null && t.BaseType == typeof(Stream)))
         {
@@ -244,7 +245,7 @@ namespace Nemiro.OAuth
     /// <param name="name">The name of parameter.</param>
     /// <param name="file">The posted file.</param>
     [Obsolete("Use overload.", false)]
-    public void Add(string name, System.Web.HttpPostedFile file)
+    public void Add(string name, HttpPostedFile file)
     {
       if (file == null)
       {
@@ -258,7 +259,7 @@ namespace Nemiro.OAuth
     /// </summary>
     /// <param name="file">The posted file.</param>
     [Obsolete("Use overload.", false)]
-    public void Add(System.Web.HttpPostedFile file)
+    public void Add(HttpPostedFile file)
     {
       if (file == null)
       {
@@ -349,9 +350,9 @@ namespace Nemiro.OAuth
       {
         throw new ArgumentNullException("requestBody");
       }
-      if (requestBody.GetType() == typeof(System.Web.HttpPostedFile))
+      if (requestBody.GetType() == typeof(HttpPostedFile))
       {
-        this.Add((System.Web.HttpPostedFile)requestBody);
+        this.Add((HttpPostedFile)requestBody);
       }
       else if (requestBody.GetType() == typeof(Stream) || requestBody.GetType().IsSubclassOf(typeof(Stream))) // (requestBody.GetType().BaseType != null && requestBody.GetType().BaseType == typeof(Stream))
       {
@@ -429,7 +430,7 @@ namespace Nemiro.OAuth
     /// </summary>
     /// <param name="file">The posted file.</param>
     [Obsolete("Use overload.", false)]
-    public void AddContent(System.Web.HttpPostedFile file)
+    public void AddContent(HttpPostedFile file)
     {
       this.AddContent(null, file);
     }
@@ -441,9 +442,9 @@ namespace Nemiro.OAuth
     /// <param name="value">The content value.</param>
     public void AddContent(string contentType, object value)
     {
-      if (String.IsNullOrEmpty(contentType) && value != null && value.GetType() == typeof(System.Web.HttpPostedFile))
+      if (String.IsNullOrEmpty(contentType) && value != null && value.GetType() == typeof(HttpPostedFile))
       {
-        contentType = ((System.Web.HttpPostedFile)value).ContentType;
+        contentType = ((HttpPostedFile)value).ContentType;
       }
 
       if (String.IsNullOrEmpty(contentType))
@@ -461,9 +462,9 @@ namespace Nemiro.OAuth
 
       var t = value.GetType();
 
-      if (t == typeof(System.Web.HttpPostedFile))
+      if (t == typeof(HttpPostedFile))
       {
-        this.Add(new HttpParameter(null, (System.Web.HttpPostedFile)value, contentType));
+        this.Add(new HttpParameter(null, (HttpPostedFile)value, contentType));
       }
       else if (t == typeof(Stream) || (t.BaseType != null && t.BaseType == typeof(Stream)))
       {
@@ -487,11 +488,7 @@ namespace Nemiro.OAuth
         {
           if (contentType.Contains("json"))
           {
-            string json = new System.Web.Script.Serialization.JavaScriptSerializer()
-            {
-              MaxJsonLength = Int32.MaxValue,
-              RecursionLimit = Int32.MaxValue
-            }.Serialize(value);
+            string json = JsonConvert.SerializeObject(value);
             this.Add(new HttpParameter(null, new HttpParameterValue(json), contentType));
           }
           else if (contentType.Contains("xml"))

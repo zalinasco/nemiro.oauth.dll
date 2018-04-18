@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Web;
+using Newtonsoft.Json;
 
 namespace Nemiro.OAuth
 {
@@ -274,11 +275,7 @@ namespace Nemiro.OAuth
 
         if (contentType.Contains("json"))
         {
-          dataToWrite = new System.Web.Script.Serialization.JavaScriptSerializer()
-          {
-            MaxJsonLength = Int32.MaxValue,
-            RecursionLimit = Int32.MaxValue
-          }.Serialize(this.Value);
+					dataToWrite = JsonConvert.SerializeObject(this.Value);
         }
         else if (contentType.Contains("xml"))
         {
@@ -453,7 +450,7 @@ namespace Nemiro.OAuth
     }
 
     /// <summary>
-    /// Implements the assignment operator for the <see cref="System.Web.HttpPostedFile"/>.
+    /// Implements the assignment operator for the <see cref="HttpPostedFile"/>.
     /// </summary>
     /// <param name="value">The value to be assigned.</param>
     /// <returns>New instance of the <see cref="HttpParameterValue"/>.</returns>

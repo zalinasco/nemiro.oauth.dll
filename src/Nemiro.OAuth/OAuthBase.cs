@@ -261,7 +261,7 @@ namespace Nemiro.OAuth
     /// </exception>
     public virtual void RedirectToAuthorization()
     {
-      if (HttpContext.Current == null)
+      if ( HttpContext.Current == null)
       {
         throw new NullHttpContextException();
       }

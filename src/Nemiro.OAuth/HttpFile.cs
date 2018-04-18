@@ -44,7 +44,7 @@ namespace Nemiro.OAuth
     /// <param name="parameterName">The name of the parameter.</param>
     /// <param name="file">The posted file.</param>
     [Obsolete("Use overload.", false)]
-    public HttpFile(string parameterName, System.Web.HttpPostedFile file) : this(parameterName, file.FileName, file.ContentType, file.InputStream)
+    public HttpFile(string parameterName, HttpPostedFile file) : this(parameterName, file.FileName, file.ContentType, file.InputStream)
     { }
 
     /// <summary>

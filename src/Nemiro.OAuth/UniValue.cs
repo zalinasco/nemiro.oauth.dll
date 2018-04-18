@@ -26,6 +26,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
+using Newtonsoft.Json;
 
 namespace Nemiro.OAuth
 {
@@ -1005,14 +1006,7 @@ namespace Nemiro.OAuth
     /// <exception cref="InvalidOperationException">It is not possible to convert <paramref name="text"/> to the target type.</exception>
     public static UniValue ParseJson(string text)
     {
-      return UniValue.Create
-      (
-        new System.Web.Script.Serialization.JavaScriptSerializer()
-        {
-          MaxJsonLength = Int32.MaxValue,
-          RecursionLimit = Int32.MaxValue
-        }.DeserializeObject(text), null, null
-      );
+			return UniValue.Create(JsonConvert.DeserializeObject(text));
     }
 
     /// <summary>
